@@ -53,7 +53,7 @@ let first_part lines =
 
 let second_part lines =
   let rec group_in_threes accumulator lines =
-    match ListUtil.split 3 lines with
+    match ListUtil.separate 3 lines with
     | { head = [_; _; _] as head; tail = [] } -> head :: accumulator
     | { head; tail } -> group_in_threes (head :: accumulator) tail
   in
