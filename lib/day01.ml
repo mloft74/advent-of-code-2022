@@ -1,7 +1,4 @@
-open Io
-
-let run () = RunUtil.run_day 1 (fun () ->
-  let lines = read_lines "input/day01/input.txt" in
+let run () = RunUtil.run_day 1 (fun lines ->
   let number_options = List.map int_of_string_opt lines in
 
   let calories_per_elf = List.fold_left (
