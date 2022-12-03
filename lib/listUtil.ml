@@ -1,6 +1,6 @@
 type 'a separated_list = {
   head: 'a list;
-  tail: 'a list
+  tail: 'a list;
 }
 
 (** Returns a [separated_list] where [head] contains [n] items and [tail] contains the rest.
@@ -14,11 +14,10 @@ let separate n list =
   else (
     let rec inner_split accumulator current_depth current_list =
       if current_depth = n then
-        { head = accumulator; tail = current_list; }
+        { head = accumulator; tail = current_list }
       else 
         match current_list with
-        | [] ->
-          { head = accumulator; tail = [] }
+        | [] -> { head = accumulator; tail = [] }
         | head :: tail ->
           inner_split (head :: accumulator) (current_depth + 1) tail
     in
@@ -27,12 +26,10 @@ let separate n list =
   )
 
 (** Calls [separate] and returns [head]. See also: [separate]. *)
-let take n list =
-  (separate n list).head
+let take n list = (separate n list).head
 
 (** Calls [separate] and returns [tail]. See also: [separate]. *)
-let skip n list =
-  (separate n list).tail
+let skip n list = (separate n list).tail
 
 (* #### TESTS #### *)
 

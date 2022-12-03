@@ -1,4 +1,4 @@
-module CharSet = Set.Make(Char)
+module CharSet = Set.Make (Char)
 
 exception InvalidCharArg of char
 exception CharMatchNotFound
@@ -19,35 +19,43 @@ let value_of_char char =
     raise (InvalidCharArg char)
 
 let find_matching_char list =
-  let char_set_from_string = String.fold_left (fun set char -> CharSet.add char set) CharSet.empty in
-
+  let char_set_from_string =
+    String.fold_left (fun set char -> CharSet.add char set) CharSet.empty
+  in
   match list with
   | first :: second :: tail ->
-    let second_set = char_set_from_string second in
-    let tail_sets = List.map char_set_from_string tail in
-    let set = List.fold_left (CharSet.inter) second_set tail_sets in
-    let start_value = '0' in
-    let matched_char = String.fold_left (fun matched char ->
-      if CharSet.mem char set then
-        char
+      let second_set = char_set_from_string second in
+      let tail_sets = List.map char_set_from_string tail in
+      let set = List.fold_left CharSet.inter second_set tail_sets in
+      let start_value = '0' in
+      let matched_char =
+        String.fold_left (
+          fun matched char ->
+            if CharSet.mem char set then
+              char
+            else
+              matched
+        ) start_value first
+      in
+      if matched_char = start_value then
+        raise CharMatchNotFound
       else
-        matched
-    ) start_value first in
-    if matched_char = start_value then
-      raise CharMatchNotFound
-    else (
-      matched_char
-    )
+        matched_char
   | _ -> raise InvalidListSize
 
 let first_part lines =
-  let matched_chars = List.map (fun line ->
-    let half_length = (String.length line) / 2 in
-    let first_half = String.sub line 0 half_length in
-    let last_half = String.sub line half_length half_length in
-    find_matching_char [first_half; last_half]
-  ) lines in
-  let sum = List.fold_left (fun sum char -> sum + value_of_char char) 0 matched_chars in
+  let matched_chars =
+    List.map (
+      fun line ->
+        let half_length = String.length line / 2 in
+        let first_half = String.sub line 0 half_length in
+        let last_half = String.sub line half_length half_length in
+        find_matching_char [first_half; last_half]
+    ) lines
+  in
+  let sum =
+    List.fold_left (fun sum char -> sum + value_of_char char) 0 matched_chars
+  in
   Printf.printf "first part sum: %d\n" sum;
   ()
 
@@ -59,12 +67,15 @@ let second_part lines =
   in
   let groups = group_in_threes [] lines in
   let matched_chars = List.map find_matching_char groups in
-  let sum = List.fold_left (fun sum char -> sum + value_of_char char) 0 matched_chars in
+  let sum =
+    List.fold_left (fun sum char -> sum + value_of_char char) 0 matched_chars
+  in
   Printf.printf "second part sum: %d\n" sum;
   ()
 
-let run () = RunUtil.run_day 03 (fun lines ->
-  (* let lines = ["vJrwpWtwJgWrhcsFMMfFFhFp"; "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"; "PmmdzqPrVvPwwTWBwg"; "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"; "ttgJtRGJQctTZtZT"; "CrZsJsPPZsGzwwsLwLmpwMDw"] in *)
-  first_part lines;
-  second_part lines
+let run () = RunUtil.run_day 03 (
+  fun lines ->
+    (* let lines = ["vJrwpWtwJgWrhcsFMMfFFhFp"; "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"; "PmmdzqPrVvPwwTWBwg"; "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"; "ttgJtRGJQctTZtZT"; "CrZsJsPPZsGzwwsLwLmpwMDw"] in *)
+    first_part lines;
+    second_part lines
 )

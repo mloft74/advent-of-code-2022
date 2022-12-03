@@ -1,4 +1,6 @@
 (library
  (name advent_of_code_2022)
  (inline_tests)
- (preprocess (pps ppx_inline_test)))
+ (preprocess
+  (pps ppx_inline_test))
+ (modules_without_implementation day))

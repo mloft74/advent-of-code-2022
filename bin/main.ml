@@ -1,6 +1,6 @@
 open Advent_of_code_2022
 
-let () = 
+let () =
   Day01.run ();
   Day02.run ();
   Day03.run ()
