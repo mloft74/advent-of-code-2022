@@ -1,6 +1,5 @@
-let run () = RunUtil.run_day 1 (fun lines ->
+let calories_per_elf_from_lines lines =
   let number_options = List.map int_of_string_opt lines in
-
   let calories_per_elf = List.fold_left (
     fun accumulator x ->
       match x with
@@ -10,24 +9,56 @@ let run () = RunUtil.run_day 1 (fun lines ->
         | [] -> [n;]
         | head :: tail -> (head + n) :: tail
   ) [] number_options in
+  List.rev calories_per_elf
 
-  let calories_per_elf = List.sort (
-    fun a b ->
-      if a = b then
-        0
-      else if a > b then
-        -1
-      else
-        1
-  ) calories_per_elf in
+let part_1 calories_per_elf =
+  List.fold_left (fun max x -> if x > max then x else max) 0 calories_per_elf
 
-  let top_1 = ListUtil.take 1 calories_per_elf in
-  let total_from_top_1 = List.fold_left (fun acc x -> acc + x) 0 top_1 in
-  Printf.printf "top calories: %d\n" total_from_top_1;
-
+let part_2 calories_per_elf =
+  let calories_per_elf = List.sort Int.compare calories_per_elf in
+  let calories_per_elf = List.rev calories_per_elf in
   let top_3 = ListUtil.take 3 calories_per_elf in
-  let total_from_top_3 = List.fold_left (fun acc x -> acc + x) 0 top_3 in
-  Printf.printf "top 3 calories combined: %d\n" total_from_top_3;
+  List.fold_left (+) 0 top_3
 
+let run () = RunUtil.run_day 1 (fun lines ->
+  let calories_per_elf = calories_per_elf_from_lines lines in
+  let part_1_res = part_1 calories_per_elf in
+  Printf.printf "part1: %d\n" part_1_res;
+  let part_2_res = part_2 calories_per_elf in
+  Printf.printf "part2: %d\n" part_2_res;
   ()
 )
+
+(* #### TESTS #### *)
+
+let lines = [
+  "1000";
+  "2000";
+  "3000";
+  "";
+  "4000";
+  "";
+  "5000";
+  "6000";
+  "";
+  "7000";
+  "8000";
+  "9000";
+  "";
+  "10000";
+]
+
+let calories_per_elf = calories_per_elf_from_lines lines
+
+let%test _ =
+  calories_per_elf = [6000; 4000; 11000; 24000; 10000;]
+
+(* part 1 *)
+let%test _ =
+  let res = part_1 calories_per_elf in
+  res = 24000
+
+(* part 2 *)
+let%test _ =
+  let res = part_2 calories_per_elf in
+  res = 45000
