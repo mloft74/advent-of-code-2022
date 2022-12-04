@@ -5,15 +5,13 @@ type range = {
   high: int;
 }
 
-module RangeSet = Set.Make (Int)
-exception RangeDecreases
-
 let create_opt low high =
   if high < low then
     None
   else
     Some { low; high }
 
+exception RangeDecreases
 let create low high =
   match create_opt low high with
   | None -> raise RangeDecreases
@@ -28,6 +26,7 @@ let length range = range.high - range.low + 1
 let int_list_of_range range =
   List.init (length range) (fun i -> range.low + i)
 
+module RangeSet = Set.Make (Int)
 let get_overlap_opt a b =
   let a_set = RangeSet.of_list (int_list_of_range a) in
   let b_set = RangeSet.of_list (int_list_of_range b) in
@@ -42,6 +41,33 @@ let get_overlap_opt a b =
     | Some high -> Some (create low high)
 
 (* #### TESTS #### *)
+
+(* create_opt works as expected *)
+let%test _ =
+  let low = 5 in
+  let high = 10 in
+  let res = create_opt low high in
+  res = Some ({ low; high })
+
+(* create works as expected *)
+let%test _ =
+  let low = 5 in
+  let high = 10 in
+  let res = create low high in
+  res = { low; high }
+
+(* can't create_opt a decreasing range  *)
+let%test _ =
+  let res = create_opt 12 5 in
+  res = None
+
+(* can't create a decreasing range *)
+let%test _ =
+  let res =
+    try Some (create 12 5) with
+    | RangeDecreases -> None
+  in
+  res = None
 
 (* testing length *)
 let%test _ =

@@ -1,5 +1,4 @@
 type range = { low : int; high : int; }
-exception RangeDecreases
 val create_opt : int -> int -> range option
 val create : int -> int -> range
 
@@ -11,3 +10,5 @@ val length : range -> int
 val int_list_of_range : range -> int list
 
 val get_overlap_opt : range -> range -> range option
+
+exception RangeDecreases
