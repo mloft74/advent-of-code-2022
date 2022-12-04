@@ -2,7 +2,6 @@ module CharSet = Set.Make (Char)
 
 exception InvalidCharArg of char
 exception CharMatchNotFound
-exception NotGroupOfThree
 exception InvalidListSize
 
 let value_of_char char =
@@ -43,7 +42,7 @@ let find_matching_char list =
         matched_char
   | _ -> raise InvalidListSize
 
-let first_part lines =
+let part_1 lines =
   let matched_chars =
     List.map (
       fun line ->
@@ -59,7 +58,7 @@ let first_part lines =
   Printf.printf "first part sum: %d\n" sum;
   ()
 
-let second_part lines =
+let part_2 lines =
   let rec group_in_threes accumulator lines =
     match ListUtil.separate 3 lines with
     | { head = [_; _; _] as head; tail = [] } -> head :: accumulator
@@ -76,6 +75,6 @@ let second_part lines =
 let run () = RunUtil.run_day 03 (
   fun lines ->
     (* let lines = ["vJrwpWtwJgWrhcsFMMfFFhFp"; "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"; "PmmdzqPrVvPwwTWBwg"; "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"; "ttgJtRGJQctTZtZT"; "CrZsJsPPZsGzwwsLwLmpwMDw"] in *)
-    first_part lines;
-    second_part lines
+    part_1 lines;
+    part_2 lines
 )

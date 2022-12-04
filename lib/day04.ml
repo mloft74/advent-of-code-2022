@@ -49,10 +49,11 @@ let lines = [
   "2-6,4-8";
 ]
 
+let range_pairs = get_range_pairs_from_lines lines
+
 (* ensure parsing works *)
 let%test _ =
-  let res = get_range_pairs_from_lines lines in
-  res = [
+  range_pairs = [
     (Range.create 2 4, Range.create 6 8);
     (Range.create 2 3, Range.create 4 5);
     (Range.create 5 7, Range.create 7 9);
@@ -60,8 +61,6 @@ let%test _ =
     (Range.create 6 6, Range.create 4 6);
     (Range.create 2 6, Range.create 4 8);
   ]
-
-let range_pairs = get_range_pairs_from_lines lines
 
 (* test part 1 with sample data *)
 let%test _ =

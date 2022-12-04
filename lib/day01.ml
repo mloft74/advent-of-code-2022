@@ -25,10 +25,8 @@ let part_2 calories_per_elf =
 let run () = RunUtil.run_day 1 (
   fun lines ->
     let calories_per_elf = calories_per_elf_from_lines lines in
-    let part_1_res = part_1 calories_per_elf in
-    Printf.printf "part1: %d\n" part_1_res;
-    let part_2_res = part_2 calories_per_elf in
-    Printf.printf "part2: %d\n" part_2_res;
+    Printf.printf "top calories: %d\n" (part_1 calories_per_elf);
+    Printf.printf "combined top 3 calories: %d\n" (part_2 calories_per_elf);
     ()
 )
 
