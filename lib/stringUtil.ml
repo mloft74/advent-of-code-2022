@@ -6,6 +6,12 @@ let split_in_2_on_char char input =
   | [a; b] -> (a, b)
   | _ -> raise (InvalidInputString input)
 
+(*https://stackoverflow.com/a/8373836*)
+let contains input search_value =
+  let regexp = Str.regexp_string search_value in
+  try ignore (Str.search_forward regexp input 0); true with
+  | Not_found -> false
+
 (* #### TESTS #### *)
 
 let%test _ =
@@ -28,3 +34,13 @@ let%test _ =
     | InvalidInputString _ -> None
   in
   res = None
+
+let%test _ =
+  let input = "mary had a little lamb" in
+  let search = "ry had a lit" in
+  contains input search
+
+let%test _ =
+  let input = "mary had a little lamb" in
+  let search = "ry [;] had a lit" in
+  not (contains input search)
